@@ -8,7 +8,7 @@ metadata:
     component: catalogue
 spec:
   replicas: 2
-  selector:
+  selectors:
     matchLabels:
       project: roboshop
       env: dev
@@ -20,6 +20,6 @@ spec:
         env: dev
         component: catalogue
     spec:
-      conatiners:
+      containers:
       - name: catalogue
         image: shanmukhatadisetti/catalogue:v1
