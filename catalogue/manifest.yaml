@@ -1,58 +1,63 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Service
 metadata:
-  name: catalogue
+  name: mysql-headless
   labels:
     project: roboshop
     env: dev
-    component: catalogue
-data:
-  MONGO: "true" 
-  MONGO_URL: "mongodb://mongodb:27017/catalogue"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: catalogue
-  labels: 
+    component: mysql
+spec:
+  selector:
     project: roboshop
     env: dev
-    component: catalogue
+    component: mysql
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  labels:
+    project: roboshop
+    env: dev
+    component: mysql
 spec:
   replicas: 2
+  serviceName: "mysql-headless"
   selector:
     matchLabels:
       project: roboshop
       env: dev
-      component: catalogue
+      component: mysql
   template:
     metadata:
       labels:
         project: roboshop
         env: dev
-        component: catalogue
+        component: mysql
     spec:
       containers:
-      - name: catalogue
-        image: shanmukhatadisetti/catalogue:v1
-        envFrom:
-        - configMapRef:
-            name: catalogue
+      - name: mysql
+        image: shanmukhatadisetti/mysql:v1
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: catalogue
+  name: mysql-service
   labels:
     project: roboshop
     env: dev
-    component: catalogue
+    component: mysql
 spec:
   selector:
     project: roboshop
     env: dev
-    component: catalogue
+    component: mysql
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 3306
+    targetPort: 3306
