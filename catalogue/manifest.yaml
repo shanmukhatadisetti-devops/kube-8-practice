@@ -2,10 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: catalogue
-  labels:
+  labels: 
     project: roboshop
     env: dev
     component: catalogue
+  namespace: roboshop
 spec:
   replicas: 2
   selector:
