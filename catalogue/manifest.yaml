@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  labels:
+    project: roboshop
+    env: dev
+    component: catalogue
+spec:
+  replicas: 2
+  selectors:
+    matchLabels:
+      project: roboshop
+      env: dev
+      component: catalogue
+  template:
+    metadata:
+      labels:
+        project: roboshop
+        env: dev
+        component: catalogue
+    spec:
+      conatiners:
+      - name: catalogue
+        image: shanmukhatadisetti/catalogue:v1
